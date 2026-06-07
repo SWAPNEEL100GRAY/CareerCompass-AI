@@ -8,64 +8,43 @@ class CareerRecommender:
 
     def calculate_scores(self, student):
 
-        technical = (
-            student["Technical_Strength_Score"]
-        )
-
-        professional = (
-            student["Professional_Readiness_Score"]
-        )
-
-        activity = (
-            student["Activity_Score"]
-        )
-
-        employability = (
-            student["Employability_Score"]
-        )
-
         return {
-            "technical": technical,
-            "professional": professional,
-            "activity": activity,
-            "employability": employability
+            "technical": student["Technical_Strength_Score"],
+            "professional": student["Professional_Readiness_Score"],
+            "activity": student["Activity_Score"],
+            "employability": student["Employability_Score"]
         }
 
     def recommend_careers(self, student):
 
         scores = self.calculate_scores(student)
 
-        careers = {}
+        careers = {
+            "AI Engineer":
+                scores["technical"] * 0.60 +
+                scores["activity"] * 0.20 +
+                scores["employability"] * 0.20,
 
-        careers["Data Scientist"] = (
-            scores["technical"] * 0.5 +
-            scores["professional"] * 0.3 +
-            scores["employability"] * 0.2
-        )
+            "Machine Learning Engineer":
+                scores["technical"] * 0.55 +
+                scores["activity"] * 0.25 +
+                scores["professional"] * 0.20,
 
-        careers["AI Engineer"] = (
-            scores["technical"] * 0.6 +
-            scores["activity"] * 0.2 +
-            scores["employability"] * 0.2
-        )
+            "Data Scientist":
+                scores["technical"] * 0.50 +
+                scores["professional"] * 0.30 +
+                scores["employability"] * 0.20,
 
-        careers["Machine Learning Engineer"] = (
-            scores["technical"] * 0.55 +
-            scores["activity"] * 0.25 +
-            scores["professional"] * 0.2
-        )
+            "Data Analyst":
+                scores["technical"] * 0.40 +
+                scores["professional"] * 0.40 +
+                scores["employability"] * 0.20,
 
-        careers["Data Analyst"] = (
-            scores["professional"] * 0.4 +
-            scores["technical"] * 0.4 +
-            scores["employability"] * 0.2
-        )
-
-        careers["Business Analyst"] = (
-            scores["professional"] * 0.5 +
-            scores["employability"] * 0.3 +
-            scores["activity"] * 0.2
-        )
+            "Business Analyst":
+                scores["professional"] * 0.50 +
+                scores["employability"] * 0.30 +
+                scores["activity"] * 0.20
+        }
 
         ranked = sorted(
             careers.items(),
@@ -73,7 +52,84 @@ class CareerRecommender:
             reverse=True
         )
 
-        return ranked[:5]
+        max_score = ranked[0][1]
+
+        recommendations = []
+
+        for role, score in ranked:
+
+            match_percent = round(
+                (score / max_score) * 100,
+                1
+            )
+
+            if "AI" in role or "Machine Learning" in role:
+                reason = "Strong technical and AI profile"
+
+            elif "Data" in role:
+                reason = "Good analytical and problem-solving ability"
+
+            elif "Business" in role:
+                reason = "Strong communication and professional readiness"
+
+            else:
+                reason = "Balanced profile"
+
+            recommendations.append(
+                {
+                    "role": role,
+                    "match": match_percent,
+                    "reason": reason
+                }
+            )
+
+        return recommendations
+
+    def get_career_report(self, student):
+
+        scores = self.calculate_scores(student)
+
+        career_readiness = round(
+            (
+                scores["technical"] +
+                scores["professional"] +
+                scores["activity"] +
+                scores["employability"]
+            ) / 4,
+            2
+        )
+
+        recommendations = self.recommend_careers(student)
+
+        strengths = []
+
+        if scores["technical"] >= 60:
+            strengths.append("Strong Technical Skills")
+
+        if scores["professional"] >= 60:
+            strengths.append("Good Communication & Interview Readiness")
+
+        if scores["activity"] >= 60:
+            strengths.append("Active Project Portfolio")
+
+        improvements = []
+
+        if scores["technical"] < 60:
+            improvements.append("Improve technical skills")
+
+        if scores["professional"] < 60:
+            improvements.append("Improve communication and interview skills")
+
+        if scores["activity"] < 60:
+            improvements.append("Build more projects and participate in hackathons")
+
+        return {
+            "career_readiness": career_readiness,
+            "recommendations": recommendations,
+            "strengths": strengths,
+            "improvements": improvements,
+            "scores": scores
+        }
 
 
 if __name__ == "__main__":
@@ -84,75 +140,20 @@ if __name__ == "__main__":
 
     student = recommender.df.iloc[0]
 
-recommendations = recommender.recommend_careers(student)
-
-scores = recommender.calculate_scores(student)
-
-career_readiness = round(
-    (
-        scores["technical"] +
-        scores["professional"] +
-        scores["activity"] +
-        scores["employability"]
-    ) / 4,
-    2
-)
-
-best_domain = recommendations[0][0]
-
-print("\n" + "=" * 50)
-print("CAREER RECOMMENDATION REPORT")
-print("=" * 50)
-
-print(f"\nCareer Readiness Score: {career_readiness}%")
-
-print(f"\nBest Match: {best_domain}")
-
-print("\nTop Career Recommendations:\n")
-
-max_score = recommendations[0][1]
-
-for idx, (role, score) in enumerate(recommendations, start=1):
-
-    match_percent = round(
-        (score / max_score) * 100,
-        1
+    report = recommender.get_career_report(
+        student
     )
 
-    print(f"{idx}. {role}")
-    print(f"   Match: {match_percent}%")
+    print("\nCAREER REPORT\n")
 
-    if "AI" in role or "Machine Learning" in role:
-        reason = "Strong technical and AI-related profile"
+    print(
+        f"Career Readiness: {report['career_readiness']}%"
+    )
 
-    elif "Data" in role:
-        reason = "Good analytical and problem-solving ability"
+    print("\nTop Recommendations:\n")
 
-    elif "Business" in role:
-        reason = "Strong professional readiness and communication"
+    for rec in report["recommendations"]:
 
-    else:
-        reason = "Balanced overall profile"
-
-    print(f"   Reason: {reason}\n")
-
-print("Top Strengths:")
-print(f"- Technical Strength: {round(scores['technical'],2)}")
-print(f"- Professional Readiness: {round(scores['professional'],2)}")
-print(f"- Employability: {round(scores['employability'],2)}")
-
-print("\nAreas to Improve:")
-
-if scores["technical"] < 60:
-    print("- Improve technical skills")
-
-if scores["professional"] < 60:
-    print("- Improve communication and interview skills")
-
-if scores["activity"] < 60:
-    print("- Build more projects and participate in hackathons")
-
-print("\nSuggested Next Step:")
-print("- Continue building portfolio projects")
-print("- Add internships and certifications")
-print("- Improve domain-specific skills")
+        print(
+            f"{rec['role']} ({rec['match']}%)"
+        )

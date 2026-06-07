@@ -95,38 +95,46 @@ class RoadmapGenerator:
         }
     }
 
-    def generate_roadmap(self, career):
+    def get_roadmap(self, career):
 
         roadmap = self.ROADMAPS.get(career)
 
         if not roadmap:
-            print("Roadmap not available.")
-            return
 
-        print("\n" + "=" * 60)
-        print("90 DAY CAREER ROADMAP")
-        print("=" * 60)
+            return {
+                "career": career,
+                "roadmap": {},
+                "goal": "Roadmap not available."
+            }
 
-        print(f"\nTarget Career: {career}")
-
-        for month, tasks in roadmap.items():
-
-            print(f"\n{month}")
-            print("-" * 30)
-
-            for i, task in enumerate(tasks, start=1):
-                print(f"{i}. {task}")
-
-        print("\nFinal Goal:")
-        print("Build a portfolio project and prepare for interviews.")
-
-        print("\n" + "=" * 60)
+        return {
+            "career": career,
+            "roadmap": roadmap,
+            "goal": "Build a portfolio project and prepare for interviews."
+        }
 
 
 if __name__ == "__main__":
 
-    career = "AI Engineer"
-
     generator = RoadmapGenerator()
 
-    generator.generate_roadmap(career)
+    report = generator.get_roadmap(
+        "AI Engineer"
+    )
+
+    print("\nROADMAP REPORT\n")
+
+    print(
+        f"Career: {report['career']}"
+    )
+
+    for month, tasks in report["roadmap"].items():
+
+        print(f"\n{month}")
+
+        for task in tasks:
+            print("-", task)
+
+    print(
+        f"\nGoal: {report['goal']}"
+    )
