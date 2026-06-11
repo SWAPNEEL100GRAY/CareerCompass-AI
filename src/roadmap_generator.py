@@ -25,6 +25,29 @@ class RoadmapGenerator:
             ]
         },
 
+        "Machine Learning Engineer": {
+            "Month 1": [
+                "Python for ML",
+                "Statistics & Probability",
+                "Supervised Learning",
+                "Regression / Classification Project"
+            ],
+
+            "Month 2": [
+                "Feature Engineering",
+                "Model Evaluation",
+                "Scikit-learn Pipelines",
+                "End-to-End ML Project"
+            ],
+
+            "Month 3": [
+                "Deep Learning Basics",
+                "Experiment Tracking",
+                "Model Deployment Basics",
+                "ML Interview Preparation"
+            ]
+        },
+
         "Data Scientist": {
             "Month 1": [
                 "Python",
@@ -45,6 +68,29 @@ class RoadmapGenerator:
                 "Advanced ML",
                 "Case Studies",
                 "Interview Preparation"
+            ]
+        },
+
+        "Data Analyst": {
+            "Month 1": [
+                "Excel / Spreadsheets",
+                "SQL Fundamentals",
+                "Python for Data Analysis",
+                "Data Cleaning Project"
+            ],
+
+            "Month 2": [
+                "Pandas",
+                "Data Visualization",
+                "Statistics Basics",
+                "Exploratory Analysis Project"
+            ],
+
+            "Month 3": [
+                "Dashboard Building",
+                "Business Metrics",
+                "Case Study Presentation",
+                "Portfolio Polish"
             ]
         },
 

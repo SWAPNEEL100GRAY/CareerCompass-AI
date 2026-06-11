@@ -9,11 +9,25 @@ CAREER_SKILLS = {
         "System_Design_Knowledge": "System Design"
     },
 
+    "Machine Learning Engineer": {
+        "AI_ML_Skill_Level": "Machine Learning",
+        "DSA_Problems_Solved": "Programming & DSA",
+        "Projects_Count": "ML Portfolio Projects",
+        "GitHub_Contributions": "GitHub / Code Portfolio"
+    },
+
     "Data Scientist": {
         "AI_ML_Skill_Level": "Machine Learning",
         "Projects_Count": "Data Science Projects",
         "Aptitude_Test_Score": "Statistics & Analytics",
         "Communication_Skills": "Business Communication"
+    },
+
+    "Data Analyst": {
+        "Aptitude_Test_Score": "Analytical Thinking",
+        "Projects_Count": "Data Analysis Projects",
+        "Communication_Skills": "Insight Communication",
+        "Resume_Score": "Professional Profile"
     },
 
     "Software Engineer": {

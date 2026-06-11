@@ -15,35 +15,61 @@ class CareerRecommender:
             "employability": student["Employability_Score"]
         }
 
+    def normalize_student_profile(self, student):
+
+        return {
+            "ai_ml": student["AI_ML_Skill_Level"],
+            "system_design": student["System_Design_Knowledge"],
+            "communication": student["Communication_Skills"],
+            "resume": student["Resume_Score"],
+            "aptitude": student["Aptitude_Test_Score"],
+            "technical": student["Technical_Strength_Score"],
+            "professional": student["Professional_Readiness_Score"],
+            "dsa": min(student["DSA_Problems_Solved"] / 500 * 100, 100),
+            "projects": min(student["Projects_Count"] / 10 * 100, 100),
+            "github": min(student["GitHub_Contributions"] / 100 * 100, 100),
+            "internships": min(student.get("Internships", 0) / 3 * 100, 100)
+        }
+
     def recommend_careers(self, student):
 
-        scores = self.calculate_scores(student)
+        profile = self.normalize_student_profile(student)
 
         careers = {
             "AI Engineer":
-                scores["technical"] * 0.60 +
-                scores["activity"] * 0.20 +
-                scores["employability"] * 0.20,
+                profile["ai_ml"] * 0.35 +
+                profile["system_design"] * 0.20 +
+                profile["projects"] * 0.20 +
+                profile["github"] * 0.15 +
+                profile["dsa"] * 0.10,
 
             "Machine Learning Engineer":
-                scores["technical"] * 0.55 +
-                scores["activity"] * 0.25 +
-                scores["professional"] * 0.20,
+                profile["ai_ml"] * 0.30 +
+                profile["dsa"] * 0.25 +
+                profile["projects"] * 0.20 +
+                profile["github"] * 0.15 +
+                profile["technical"] * 0.10,
 
             "Data Scientist":
-                scores["technical"] * 0.50 +
-                scores["professional"] * 0.30 +
-                scores["employability"] * 0.20,
+                profile["ai_ml"] * 0.25 +
+                profile["aptitude"] * 0.25 +
+                profile["projects"] * 0.20 +
+                profile["communication"] * 0.15 +
+                profile["technical"] * 0.15,
 
             "Data Analyst":
-                scores["technical"] * 0.40 +
-                scores["professional"] * 0.40 +
-                scores["employability"] * 0.20,
+                profile["aptitude"] * 0.30 +
+                profile["communication"] * 0.25 +
+                profile["resume"] * 0.20 +
+                profile["projects"] * 0.15 +
+                profile["professional"] * 0.10,
 
             "Business Analyst":
-                scores["professional"] * 0.50 +
-                scores["employability"] * 0.30 +
-                scores["activity"] * 0.20
+                profile["communication"] * 0.35 +
+                profile["aptitude"] * 0.25 +
+                profile["resume"] * 0.20 +
+                profile["professional"] * 0.15 +
+                profile["internships"] * 0.05
         }
 
         ranked = sorted(
@@ -52,34 +78,37 @@ class CareerRecommender:
             reverse=True
         )
 
-        max_score = ranked[0][1]
-
         recommendations = []
+
+        reasons = {
+            "AI Engineer":
+                "Best fit for strong AI/ML, system design, projects, and GitHub activity",
+
+            "Machine Learning Engineer":
+                "Best fit for strong ML, DSA, project implementation, and coding practice",
+
+            "Data Scientist":
+                "Best fit for ML, analytical thinking, data projects, and communication",
+
+            "Data Analyst":
+                "Best fit for aptitude, communication, resume strength, and analysis projects",
+
+            "Business Analyst":
+                "Best fit for communication, business readiness, aptitude, and professional profile"
+        }
 
         for role, score in ranked:
 
             match_percent = round(
-                (score / max_score) * 100,
+                score,
                 1
             )
-
-            if "AI" in role or "Machine Learning" in role:
-                reason = "Strong technical and AI profile"
-
-            elif "Data" in role:
-                reason = "Good analytical and problem-solving ability"
-
-            elif "Business" in role:
-                reason = "Strong communication and professional readiness"
-
-            else:
-                reason = "Balanced profile"
 
             recommendations.append(
                 {
                     "role": role,
                     "match": match_percent,
-                    "reason": reason
+                    "reason": reasons[role]
                 }
             )
 

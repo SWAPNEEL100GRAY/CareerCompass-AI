@@ -1,5 +1,5 @@
 """
-Use the trained placement model to make predictions on new student data.
+Use the trained career readiness model to make recommendations for new student data.
 
 Run this script after train.py has saved a model in the models folder.
 
@@ -66,7 +66,7 @@ def prepare_input_features(df: pd.DataFrame, model_bundle: dict) -> pd.DataFrame
 
 
 def predict(df: pd.DataFrame, model_bundle: dict) -> pd.Series:
-    """Return placement predictions for the input dataframe."""
+    """Return career readiness predictions for the input dataframe."""
     X = prepare_input_features(df, model_bundle)
     model = model_bundle["model"]
     scaler = model_bundle["scaler"]
@@ -75,7 +75,7 @@ def predict(df: pd.DataFrame, model_bundle: dict) -> pd.Series:
     if scaler is not None:
         X = scaler.transform(X)
 
-    return pd.Series(model.predict(X), name="Predicted_Placement_Status")
+    return pd.Series(model.predict(X), name="Predicted_Career_Readiness_Status")
 
 
 def build_sample_input() -> pd.DataFrame:
@@ -113,7 +113,7 @@ def build_sample_input() -> pd.DataFrame:
 def parse_args() -> argparse.Namespace:
     """Read command-line arguments."""
     parser = argparse.ArgumentParser(
-        description="Predict student placement status using the trained model."
+        description="Predict student career readiness status using the trained model."
     )
     parser.add_argument(
         "--input",
@@ -129,7 +129,7 @@ def main() -> None:
     model_bundle = load_model_bundle()
 
     print("=" * 60)
-    print("PLACEMENT PREDICTION")
+    print("CAREER READINESS & RECOMMENDATION SYSTEM")
     print("=" * 60)
     print(f"Loaded model: {model_bundle['model_name']}")
 
@@ -144,7 +144,7 @@ def main() -> None:
 
     predictions = predict(df, model_bundle)
     results = df.copy()
-    results["Predicted_Placement_Status"] = predictions.values
+    results["Predicted_Career_Readiness_Status"] = predictions.values
 
     print("\nPredictions:")
     print(results)

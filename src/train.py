@@ -1,5 +1,5 @@
 """
-Train placement prediction models and save the best one.
+Train career readiness models and save the best one.
 
 This script:
 1. Loads and cleans the dataset
@@ -66,8 +66,8 @@ def create_placement_target(df: pd.DataFrame) -> pd.DataFrame:
     """
     Make sure the target column has two classes for training.
 
-    In this dataset, every student is marked as placed (1). A classifier
-    cannot learn from a single label, so we build a placement readiness
+    In this dataset, every student has the same placement label. A classifier
+    cannot learn from a single label, so we build a career readiness
     score from employability features and label students above the
     median score as 1 and others as 0.
     """
@@ -76,7 +76,7 @@ def create_placement_target(df: pd.DataFrame) -> pd.DataFrame:
 
     print(
         "Note: All rows share the same Placement_Status value. "
-        "Creating a placement readiness label for model training."
+        "Creating a career readiness label for model training."
     )
 
     readiness_score = (
@@ -220,7 +220,7 @@ def save_best_model(
 
 def main() -> None:
     print("=" * 60)
-    print("PLACEMENT PREDICTION MODEL TRAINING")
+    print("CAREER READINESS & RECOMMENDATION SYSTEM MODEL TRAINING")
     print("=" * 60)
 
     # Step 1: Load and clean the dataset
