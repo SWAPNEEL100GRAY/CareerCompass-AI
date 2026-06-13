@@ -337,3 +337,10 @@ CareerCompass AI demonstrates practical skills relevant to internships and entry
 - Career-focused product thinking
 
 This project is suitable for showcasing an end-to-end data application that turns student profile data into actionable career guidance.
+
+Author
+
+Swapneel Kumar
+
+LinkedIn: https://www.linkedin.com/in/kumar-swapneel-a9262328b/
+GitHub: https://github.com/SWAPNEEL100GRAY
